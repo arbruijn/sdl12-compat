@@ -6382,15 +6382,17 @@ SDL_LoadWAV_RW(SDL12_RWops *rwops12, int freerwops12,
 static size_t
 mp3_sdlrwops_read(void *data, void *buf, size_t bytesToRead)
 {
-    return SDL20_RWread((SDL_RWops *) data, buf, 1, bytesToRead);
+//    return SDL20_RWread((SDL_RWops *) data, buf, 1, bytesToRead);
+return 0;
 }
 
 static drmp3_bool32
 mp3_sdlrwops_seek(void *data, int offset, drmp3_seek_origin origin)
 {
-    const int whence = (origin == drmp3_seek_origin_start) ? RW_SEEK_SET : RW_SEEK_CUR;
-    SDL_assert((origin == drmp3_seek_origin_start) || (origin == drmp3_seek_origin_current));
-    return (SDL20_RWseek((SDL_RWops *) data, offset, whence) == -1) ? DRMP3_FALSE : DRMP3_TRUE;
+ return DRMP3_FALSE;
+//    const int whence = (origin == drmp3_seek_origin_start) ? RW_SEEK_SET : RW_SEEK_CUR;
+//    SDL_assert((origin == drmp3_seek_origin_start) || (origin == drmp3_seek_origin_current));
+//    return (SDL20_RWseek((SDL_RWops *) data, offset, whence) == -1) ? DRMP3_FALSE : DRMP3_TRUE;
 }
 
 
@@ -6433,7 +6435,7 @@ FreeMp3(drmp3 *mp3)
     if (rw) {
         drmp3_uninit(mp3);
         mp3->pUserData = NULL;
-        SDL20_RWclose(rw);
+        //SDL20_RWclose(rw);
     }
 }
 
@@ -6584,7 +6586,7 @@ SDL_CDOpen(int drive)
             track->type = 4; /* data track. E.g.: quake's audio starts at track 2. */
         } else {
             if (!drmp3_init(mp3, mp3_sdlrwops_read, mp3_sdlrwops_seek, rw, NULL)) {
-                SDL20_RWclose(rw);
+                //SDL20_RWclose(rw);
                 break;  /* ok, we're done looking for more. */
             }
             pcmframes = drmp3_get_pcm_frame_count(mp3);
@@ -6703,7 +6705,7 @@ LoadCDTrack(const int tracknum, drmp3 *mp3)
     }
 
     if (!drmp3_init(mp3, mp3_sdlrwops_read, mp3_sdlrwops_seek, rw, NULL)) {
-        SDL20_RWclose(rw);
+        //SDL20_RWclose(rw);
         return SDL_FALSE;
     }
 
@@ -6897,7 +6899,7 @@ SDL_CDStop(SDL12_CD *cdrom)
     SDL20_UnlockAudio();
 
     if (oldrw) {
-        SDL20_RWclose(oldrw);
+        //SDL20_RWclose(oldrw);
     }
     return 0;
 }
